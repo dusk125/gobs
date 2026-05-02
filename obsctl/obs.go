@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
-	"os"
 
 	"github.com/dusk125/gobs"
 	"github.com/spf13/cobra"
@@ -17,12 +16,12 @@ var (
 			gobs.SetLogHandler(nil)
 			gobs.Startup("en-US")
 
-			wd, err := os.Getwd()
-			if err != nil {
-				panic(err)
-			}
+			// wd, err := os.Getwd()
+			// if err != nil {
+			// 	panic(err)
+			// }
 
-			gobs.AddModulePath(wd+"/lib/obs-plugins", wd+"/data/obs/obs-plugins/%module%")
+			// gobs.AddModulePath(wd+"/lib/obs-plugins", wd+"/data/obs/obs-plugins/%module%")
 
 			toLoad := map[string]bool{
 				"obs-ffmpeg":      false,
@@ -33,6 +32,7 @@ var (
 				"obs-transitions": false,
 				"image-source":    false,
 				"vlc-video":       false,
+				"obs-webrtc":      false,
 			}
 
 			for info := range gobs.FindModules() {
@@ -127,12 +127,23 @@ var (
 			}
 		},
 	}
+	transition = &cobra.Command{
+		Use: "transition",
+	}
 	transitionList = &cobra.Command{
-		Use: "transition list",
+		Use: "list",
 		Run: func(cmd *cobra.Command, args []string) {
 			for transition := range gobs.TransitionTypes() {
 				fmt.Println(transition)
 			}
+		},
+	}
+	transitionDefaults = &cobra.Command{
+		Use:  "defaults",
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			m := gobs.TransitionDefaults(args[0])
+			return printData(cmd, m)
 		},
 	}
 	output = &cobra.Command{
@@ -210,8 +221,9 @@ func main() {
 	output.AddCommand(outputList, outputDefaults)
 	encoder.AddCommand(encoderList, encoderDefaults)
 	service.AddCommand(serviceList, serviceDefaults)
+	transition.AddCommand(transitionList, transitionDefaults)
 	module.AddCommand(moduleList)
-	root.AddCommand(version, inputList, source, filterList, transitionList, output, encoder, service, module)
+	root.AddCommand(version, inputList, source, filterList, transition, output, encoder, service, module)
 
 	_ = root.Execute()
 }
