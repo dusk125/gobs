@@ -2,6 +2,7 @@ package gobs
 
 // #include <obs/obs.h>
 import "C"
+import "time"
 
 type Transition struct {
 	Source
@@ -63,10 +64,10 @@ func TransitionCreate(id, name string, settings, hotkeys Data) Transition {
 	return t
 }
 
-func (t Transition) Start(mode TransitionMode, durationMs uint32, dest Source) bool {
+func (t Transition) Start(mode TransitionMode, duration time.Duration, dest Source) bool {
 	// #cgo noescape obs_transition_start
 	// #cgo nocallback obs_transition_start
-	return bool(C.obs_transition_start(t.c, C.enum_obs_transition_mode(mode), C.uint32_t(durationMs), dest.c))
+	return bool(C.obs_transition_start(t.c, C.enum_obs_transition_mode(mode), C.uint32_t(duration.Milliseconds()), dest.c))
 }
 
 func (t Transition) Set(source Source) {
@@ -131,10 +132,10 @@ func (t Transition) Size() (uint32, uint32) {
 	return uint32(cx), uint32(cy)
 }
 
-func (t Transition) EnableFixed(enable bool, durationMs uint32) {
+func (t Transition) EnableFixed(enable bool, duration time.Duration) {
 	// #cgo noescape obs_transition_enable_fixed
 	// #cgo nocallback obs_transition_enable_fixed
-	C.obs_transition_enable_fixed(t.c, C.bool(enable), C.uint32_t(durationMs))
+	C.obs_transition_enable_fixed(t.c, C.bool(enable), C.uint32_t(duration.Milliseconds()))
 }
 
 func (t Transition) Fixed() bool {
