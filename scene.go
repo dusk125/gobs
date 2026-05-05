@@ -56,7 +56,7 @@ func (s Scene) Source() Source {
 func (s Scene) FindSource(name string, recursive bool) SceneItem {
 	if recursive {
 		// #cgo noescape obs_scene_find_source_recursive
-		// #cgo nocallback obs_scene_find_sourc
+		// #cgo nocallback obs_scene_find_source_recursive
 		return SceneItem{C.obs_scene_find_source_recursive(s.c, fromString(name).cptr())}
 	}
 	// #cgo noescape obs_scene_find_source
@@ -74,10 +74,10 @@ func scene_items_cb(_ *C.obs_scene_t, item *C.obs_sceneitem_t, p unsafe.Pointer)
 
 func (s Scene) Items() iter.Seq[SceneItem] {
 	return func(yield func(SceneItem) bool) {
-		// #cgo noescape obs_scene_enum_items
 		h := cgo.NewHandle(yield)
 		defer h.Delete()
 
+		// #cgo noescape obs_scene_enum_items
 		C.obs_scene_enum_items(s.c, (*[0]byte)(C.scene_items_cb), unsafe.Pointer(&h))
 	}
 }

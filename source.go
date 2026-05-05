@@ -18,6 +18,9 @@ func SourceDefaults(id string) Data {
 	return data.MapWithDefaults()
 }
 
+// Creates a source of the specified type with the specified settings.
+// The “source” context is used for anything related to presenting or modifying video/audio.
+// Use Source.Release() to release it.
 func SourceCreate(id string, name string, settings Data, hotkey Data) Source {
 	var (
 		obsSettings obs_data
@@ -61,6 +64,24 @@ func (s Source) Name() string {
 	// #cgo noescape obs_source_get_name
 	// #cgo nocallback obs_source_get_name
 	return C.GoString(C.obs_source_get_name(s.c))
+}
+
+func (s Source) VideoRender() {
+	// #cgo noescape obs_source_video_render
+	// #cgo nocallback obs_source_video_render
+	C.obs_source_video_render(s.c)
+}
+
+func (s Source) IncShowing() {
+	// #cgo noescape obs_source_inc_showing
+	// #cgo nocallback obs_source_inc_showing
+	C.obs_source_inc_showing(s.c)
+}
+
+func (s Source) DecShowing() {
+	// #cgo noescape obs_source_dec_showing
+	// #cgo nocallback obs_source_dec_showing
+	C.obs_source_dec_showing(s.c)
 }
 
 func (s Source) ProcHandler() ProcHandler {

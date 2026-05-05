@@ -6,8 +6,6 @@ import (
 	"unsafe"
 )
 
-// TODO: import . can import all elements of a name space into another, maybe useful for an abstraction around gobs?
-
 func Startup(locale string) {
 	cLocale := C.CString(locale)
 	defer C.free(unsafe.Pointer(cLocale))
@@ -56,4 +54,16 @@ func GetAudio() Audio {
 
 func GlobalSignalHandler() SignalHandler {
 	return SignalHandler{C.obs_get_signal_handler()}
+}
+
+func EnterGraphics() {
+	// #cgo noescape obs_enter_graphics
+	// #cgo nocallback obs_enter_graphics
+	C.obs_enter_graphics()
+}
+
+func LeaveGraphics() {
+	// #cgo noescape obs_leave_graphics
+	// #cgo nocallback obs_leave_graphics
+	C.obs_leave_graphics()
 }
