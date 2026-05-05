@@ -139,7 +139,7 @@ func main() {
 		browser.SetBounds(gobs.Vec2{X: float32(vinfo.BaseWidth), Y: float32(vinfo.BaseHeight)})
 	}
 
-	gobs.SetOuputSource(0, scene.Source())
+	gobs.SetOutputSource(0, scene.Source())
 
 	videoData := gobs.Data{
 		"width":   vinfo.BaseWidth,

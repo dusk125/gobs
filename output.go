@@ -184,10 +184,18 @@ func OutputDefaults(id string) Data {
 	return d.MapWithDefaults()
 }
 
-func SetOuputSource(channel uint32, source Source) {
+func SetOutputSource(channel uint32, source Source) {
 	// #cgo noescape obs_set_output_source
 	// #cgo nocallback obs_set_output_source
 	C.obs_set_output_source(C.uint32_t(channel), source.c)
+}
+
+// Gets the primary output source for a channel and increments the reference counter for that source.
+// Use Source.Release() to release.
+func OutputSource(channel uint32) Source {
+	// #cgo noescape obs_get_output_source
+	// #cgo nocallback obs_get_output_source
+	return Source{C.obs_get_output_source(C.uint32_t(channel))}
 }
 
 func OutputCreate(id string, name string, settings Data, hotkeys Data) Output {
