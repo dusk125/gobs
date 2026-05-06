@@ -9,6 +9,12 @@ func StageTexture(dst StageSurface, src Texture) {
 	C.gs_stage_texture(dst.c, src.c)
 }
 
+func StageSurfaceCreate(width, height uint32, format ColorFormat) StageSurface {
+	// #cgo noescape gs_stagesurface_create
+	// #cgo nocallback gs_stagesurface_create
+	return StageSurface{C.gs_stagesurface_create(C.uint32_t(width), C.uint32_t(height), C.enum_gs_color_format(format))}
+}
+
 type StageSurface struct {
 	c *C.gs_stagesurf_t
 }
