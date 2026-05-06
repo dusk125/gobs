@@ -73,3 +73,9 @@ func (t TexRender) End() {
 	// #cgo nocallback gs_texrender_end
 	C.gs_texrender_end(t.c)
 }
+
+func (t TexRender) Texture() Texture {
+	// #cgo noescape gs_texrender_get_texture
+	// #cgo nocallback gs_texrender_get_texture
+	return Texture{C.gs_texrender_get_texture(t.c)}
+}
