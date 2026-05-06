@@ -91,10 +91,10 @@ func (s Scene) ReorderItems(items []SceneItem) bool {
 type SceneDuplicateType uint32
 
 const (
-	SceneDupRefs        = SceneDuplicateType(C.OBS_SCENE_DUP_REFS)         // Duplicates the scene, but scene items are only duplicated with references
-	SceneDupCopy        = SceneDuplicateType(C.OBS_SCENE_DUP_COPY)         // Duplicates the scene, and scene items are also fully duplicated when possible
-	SceneDupPrivateRefs = SceneDuplicateType(C.OBS_SCENE_DUP_PRIVATE_REFS) // Duplicates with references, but the scene is a private source
-	SceneDupPrivateCopy = SceneDuplicateType(C.OBS_SCENE_DUP_PRIVATE_COPY) // Fully duplicates scene items when possible, but the scene and duplicates sources are private sources
+	SceneDupRefs        SceneDuplicateType = C.OBS_SCENE_DUP_REFS         // Duplicates the scene, but scene items are only duplicated with references
+	SceneDupCopy        SceneDuplicateType = C.OBS_SCENE_DUP_COPY         // Duplicates the scene, and scene items are also fully duplicated when possible
+	SceneDupPrivateRefs SceneDuplicateType = C.OBS_SCENE_DUP_PRIVATE_REFS // Duplicates with references, but the scene is a private source
+	SceneDupPrivateCopy SceneDuplicateType = C.OBS_SCENE_DUP_PRIVATE_COPY // Fully duplicates scene items when possible, but the scene and duplicates sources are private sources
 )
 
 func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) Scene {
