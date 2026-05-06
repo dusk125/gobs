@@ -98,6 +98,8 @@ const (
 )
 
 func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) Scene {
+	// #cgo noescape obs_scene_duplicate
+	// #cgo nocallback obs_scene_duplicate
 	return Scene{C.obs_scene_duplicate(s.c, fromString(name).cptr(), C.enum_obs_scene_duplicate_type(duplicateType))}
 }
 

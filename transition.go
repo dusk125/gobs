@@ -167,3 +167,9 @@ func (t Transition) ForceStop() {
 	// #cgo nocallback obs_transition_force_stop
 	C.obs_transition_force_stop(t.c)
 }
+
+func (t Transition) IsActive() bool {
+	// #cgo noescape obs_transition_is_active
+	// #cgo nocallback obs_transition_is_active
+	return bool(C.obs_transition_is_active(t.c))
+}
