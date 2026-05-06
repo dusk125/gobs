@@ -88,6 +88,19 @@ func (s Scene) ReorderItems(items []SceneItem) bool {
 	return bool(C.obs_scene_reorder_items(s.c, (**C.obs_sceneitem_t)(unsafe.Pointer(unsafe.SliceData(items))), C.size_t(len(items))))
 }
 
+type SceneDuplicateType uint32
+
+const (
+	SceneDupRefs        = SceneDuplicateType(C.OBS_SCENE_DUP_REFS)         // Duplicates the scene, but scene items are only duplicated with references
+	SceneDupCopy        = SceneDuplicateType(C.OBS_SCENE_DUP_COPY)         // Duplicates the scene, and scene items are also fully duplicated when possible
+	SceneDupPrivateRefs = SceneDuplicateType(C.OBS_SCENE_DUP_PRIVATE_REFS) // Duplicates with references, but the scene is a private source
+	SceneDupPrivateCopy = SceneDuplicateType(C.OBS_SCENE_DUP_PRIVATE_COPY) // Fully duplicates scene items when possible, but the scene and duplicates sources are private sources
+)
+
+func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) Scene {
+	return Scene{C.obs_scene_duplicate(s.c, fromString(name).cptr(), C.enum_obs_scene_duplicate_type(duplicateType))}
+}
+
 func (s Scene) Events(ctx context.Context) <-chan SignalScene {
 	ch := make(chan SignalScene, 8)
 
