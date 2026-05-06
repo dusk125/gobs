@@ -37,11 +37,11 @@ const (
 type ZStencilFormat uint32
 
 const (
-	ZStencilZS_NONE    = ZStencilFormat(C.GS_ZS_NONE)    // No Z-stencil buffer
-	ZStencilZ16        = ZStencilFormat(C.GS_Z16)        // 16 bit Z buffer
-	ZStencilZ24_S8     = ZStencilFormat(C.GS_Z24_S8)     // 24 bit Z buffer, 8 bit stencil
-	ZStencilZ32F       = ZStencilFormat(C.GS_Z32F)       // 32 bit floating point Z buffer
-	ZStencilZ32F_S8X24 = ZStencilFormat(C.GS_Z32F_S8X24) // 32 bit floating point Z buffer, 8 bit stencil
+	ZStencilNONE      = ZStencilFormat(C.GS_ZS_NONE)    // No Z-stencil buffer
+	ZStencil16        = ZStencilFormat(C.GS_Z16)        // 16 bit Z buffer
+	ZStencil24_S8     = ZStencilFormat(C.GS_Z24_S8)     // 24 bit Z buffer, 8 bit stencil
+	ZStencil32F       = ZStencilFormat(C.GS_Z32F)       // 32 bit floating point Z buffer
+	ZStencil32F_S8X24 = ZStencilFormat(C.GS_Z32F_S8X24) // 32 bit floating point Z buffer, 8 bit stencil
 )
 
 func TexRenderCreate(format ColorFormat, zsformat ZStencilFormat) TexRender {
