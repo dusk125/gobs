@@ -84,6 +84,18 @@ func (s Source) DecShowing() {
 	C.obs_source_dec_showing(s.c)
 }
 
+func (s Source) Width() uint32 {
+	// #cgo noescape obs_source_get_width
+	// #cgo nocallback obs_source_get_width
+	return uint32(C.obs_source_get_width(s.c))
+}
+
+func (s Source) Height() uint32 {
+	// #cgo noescape obs_source_get_height
+	// #cgo nocallback obs_source_get_height
+	return uint32(C.obs_source_get_height(s.c))
+}
+
 func (s Source) ProcHandler() ProcHandler {
 	return ProcHandler{C.obs_source_get_proc_handler(s.c)}
 }
