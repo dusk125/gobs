@@ -308,3 +308,15 @@ func (si SceneItem) SetBounds(v Vec2) {
 	// #cgo nocallback obs_sceneitem_set_bounds
 	C.obs_sceneitem_set_bounds(si.c, (*C.struct_vec2)(unsafe.Pointer(&v)))
 }
+
+func (si SceneItem) Scene() Scene {
+	// #cgo noescape obs_sceneitem_get_scene
+	// #cgo nocallback obs_sceneitem_get_scene
+	return Scene{C.obs_sceneitem_get_scene(si.c)}
+}
+
+func (si SceneItem) Source() Source {
+	// #cgo noescape obs_sceneitem_get_source
+	// #cgo nocallback obs_sceneitem_get_source
+	return Source{C.obs_sceneitem_get_source(si.c)}
+}
