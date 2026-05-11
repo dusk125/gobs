@@ -320,3 +320,15 @@ func (si SceneItem) Source() Source {
 	// #cgo nocallback obs_sceneitem_get_source
 	return Source{C.obs_sceneitem_get_source(si.c)}
 }
+
+func (si SceneItem) Visible() bool {
+	// #cgo noescape obs_sceneitem_visible
+	// #cgo nocallback obs_sceneitem_visible
+	return bool(C.obs_sceneitem_visible(si.c))
+}
+
+func (si SceneItem) SetVisible(visible bool) {
+	// #cgo noescape obs_sceneitem_set_visible
+	// #cgo nocallback obs_sceneitem_set_visible
+	C.obs_sceneitem_set_visible(si.c, C.bool(visible))
+}
