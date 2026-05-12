@@ -168,9 +168,8 @@ func (t Transition) ForceStop() {
 	C.obs_transition_force_stop(t.c)
 }
 
-// TODO: needs obs 32.1.2
-// func (t Transition) IsActive() bool {
-// 	// #cgo noescape obs_transition_is_active
-// 	// #cgo nocallback obs_transition_is_active
-// 	return bool(C.obs_transition_is_active(t.c))
-// }
+func (t Transition) IsActive() bool {
+	// #cgo noescape obs_transition_is_active
+	// #cgo nocallback obs_transition_is_active
+	return bool(C.obs_transition_is_active(t.c))
+}
