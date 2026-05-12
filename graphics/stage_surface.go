@@ -19,6 +19,10 @@ type StageSurface struct {
 	c *C.gs_stagesurf_t
 }
 
+func (s StageSurface) Valid() bool {
+	return s.c != nil
+}
+
 func (s StageSurface) Destroy() {
 	// #cgo noescape gs_stagesurface_destroy
 	// #cgo nocallback gs_stagesurface_destroy

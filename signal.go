@@ -23,6 +23,10 @@ type SignalHandler struct {
 	c *C.signal_handler_t
 }
 
+func (sh SignalHandler) Valid() bool {
+	return sh.c != nil
+}
+
 type internal_calldata struct {
 	callback Callback
 	data     any

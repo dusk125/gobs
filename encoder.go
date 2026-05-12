@@ -8,6 +8,10 @@ type Encoder struct {
 	c *C.struct_obs_encoder
 }
 
+func (e Encoder) Valid() bool {
+	return e.c != nil
+}
+
 func (e Encoder) Release() {
 	// #cgo noescape obs_encoder_release
 	// #cgo nocallback obs_encoder_release

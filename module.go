@@ -36,6 +36,10 @@ type Module struct {
 	c *C.obs_module_t
 }
 
+func (m Module) Valid() bool {
+	return m.c != nil
+}
+
 func (m Module) Init() error {
 	// #cgo noescape obs_init_module
 	// #cgo nocallback obs_init_module

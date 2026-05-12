@@ -50,6 +50,10 @@ func TexRenderCreate(format ColorFormat, zsformat ZStencilFormat) TexRender {
 	return TexRender{C.gs_texrender_create(C.enum_gs_color_format(format), C.enum_gs_zstencil_format(zsformat))}
 }
 
+func (t TexRender) Valid() bool {
+	return t.c != nil
+}
+
 func (t TexRender) Destroy() {
 	// #cgo noescape gs_texrender_destroy
 	// #cgo nocallback gs_texrender_destroy

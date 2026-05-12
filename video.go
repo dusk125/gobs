@@ -153,3 +153,7 @@ func ResetVideo(info *VideoInfo) error {
 type Video struct {
 	c *C.video_t
 }
+
+func (v Video) Valid() bool {
+	return v.c != nil
+}

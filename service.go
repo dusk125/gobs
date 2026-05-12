@@ -8,6 +8,10 @@ type Service struct {
 	c *C.obs_service_t
 }
 
+func (s Service) Valid() bool {
+	return s.c != nil
+}
+
 func (s Service) Release() {
 	// #cgo noescape obs_service_release
 	// #cgo nocallback obs_service_release

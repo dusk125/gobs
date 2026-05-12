@@ -37,3 +37,7 @@ func ResetAudio(info *AudioInfo) error {
 type Audio struct {
 	c *C.audio_t
 }
+
+func (a Audio) Valid() bool {
+	return a.c != nil
+}

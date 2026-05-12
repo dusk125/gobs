@@ -12,6 +12,10 @@ type Output struct {
 	c *C.obs_output_t
 }
 
+func (o Output) Valid() bool {
+	return o.c != nil
+}
+
 func (o Output) Release() {
 	// #cgo noescape obs_output_release
 	// #cgo nocallback obs_output_release

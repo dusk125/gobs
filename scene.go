@@ -35,6 +35,10 @@ type Scene struct {
 	c *C.obs_scene_t
 }
 
+func (s Scene) Valid() bool {
+	return s.c != nil
+}
+
 func (s Scene) Release() {
 	// #cgo noescape obs_scene_release
 	// #cgo nocallback obs_scene_release
@@ -270,6 +274,10 @@ const (
 
 type SceneItem struct {
 	c *C.obs_sceneitem_t
+}
+
+func (si SceneItem) Valid() bool {
+	return si.c != nil
 }
 
 func (si SceneItem) Release() {

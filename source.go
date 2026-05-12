@@ -44,6 +44,10 @@ func SourceCreate(id string, name string, settings Data, hotkey Data) Source {
 	return source
 }
 
+func (s Source) Valid() bool {
+	return s.c != nil
+}
+
 func (s Source) Release() {
 	// #cgo noescape obs_source_release
 	// #cgo nocallback obs_source_release
