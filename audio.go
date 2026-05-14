@@ -34,6 +34,22 @@ func ResetAudio(info *AudioInfo) error {
 	return errors.New("failed to reset audio")
 }
 
+type AudioInfo2 struct {
+	SamplesPerSec  uint32
+	Speakers       SpeakerLayout
+	MaxBufferingMs uint32
+	FixedBuffering bool
+}
+
+func ResetAudio2(info *AudioInfo2) error {
+	// #cgo noescape obs_reset_audio2
+	// #cgo nocallback obs_reset_audio2
+	if bool(C.obs_reset_audio2((*C.struct_obs_audio_info2)(unsafe.Pointer(info)))) {
+		return nil
+	}
+	return errors.New("failed to reset audio")
+}
+
 type Audio struct {
 	c *C.audio_t
 }
