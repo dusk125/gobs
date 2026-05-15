@@ -6,9 +6,17 @@ import (
 	"unsafe"
 )
 
-func Startup(locale string) {
+func Startup(locale string, args ...string) {
 	cLocale := C.CString(locale)
 	defer C.free(unsafe.Pointer(cLocale))
+
+	argc := C.int(len(args))
+	argv := make([]*C.char, len(args))
+	for i, arg := range args {
+		argv[i] = C.CString(arg)
+	}
+
+	C.obs_set_cmdline_args(argc, &argv[0])
 
 	// #cgo noescape obs_startup
 	// #cgo nocallback obs_startup
