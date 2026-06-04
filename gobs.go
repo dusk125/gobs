@@ -6,7 +6,7 @@ import (
 	"unsafe"
 )
 
-func Startup(locale string, args ...string) {
+func Startup(locale string, args ...string) bool {
 	cLocale := C.CString(locale)
 	defer C.free(unsafe.Pointer(cLocale))
 
@@ -20,7 +20,7 @@ func Startup(locale string, args ...string) {
 
 	// #cgo noescape obs_startup
 	// #cgo nocallback obs_startup
-	C.obs_startup(cLocale, nil, nil)
+	return bool(C.obs_startup(cLocale, nil, nil))
 }
 
 func Shutdown() {

@@ -340,3 +340,16 @@ func (si SceneItem) SetVisible(visible bool) {
 	// #cgo nocallback obs_sceneitem_set_visible
 	C.obs_sceneitem_set_visible(si.c, C.bool(visible))
 }
+
+func (si SceneItem) Position() (pos Vec2) {
+	// #cgo noescape obs_sceneitem_get_pos
+	// #cgo nocallback obs_sceneitem_get_pos
+	C.obs_sceneitem_get_pos(si.c, (*C.struct_vec2)(unsafe.Pointer(&pos)))
+	return
+}
+
+func (si SceneItem) SetPosition(pos Vec2) {
+	// #cgo noescape obs_sceneitem_set_pos
+	// #cgo nocallback obs_sceneitem_set_pos
+	C.obs_sceneitem_set_pos(si.c, (*C.struct_vec2)(unsafe.Pointer(&pos)))
+}
