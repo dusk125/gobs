@@ -54,6 +54,12 @@ func (s Source) Release() {
 	C.obs_source_release(s.c)
 }
 
+func (s Source) Remove() {
+	// #cgo noescape obs_source_remove
+	// #cgo nocallback obs_source_remove
+	C.obs_source_remove(s.c)
+}
+
 func (s Source) Update(settings Data) {
 	d := settings.obs_data()
 	defer d.Release()
