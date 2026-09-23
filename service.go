@@ -24,6 +24,14 @@ func (s Service) CanTryToConnect() bool {
 	return bool(C.obs_service_can_try_to_connect(s.c))
 }
 
+func (s Service) Update(settings Data) {
+	obsSettings := settings.obs_data()
+	defer obsSettings.Release()
+	// #cgo noescape obs_service_update
+	// #cgo nocallback obs_service_update
+	return C.obs_service_update(s.c, obsSettings)
+}
+
 func ServiceCreate(id, name string, settings, hotkeys Data) Service {
 	cid := C.CString(id)
 	cname := C.CString(name)

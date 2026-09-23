@@ -109,6 +109,14 @@ func (o Output) Reconnecting() bool {
 	return bool(C.obs_output_reconnecting(o.c))
 }
 
+func (o Output) Update(settings Data) {
+	obsSettings := settings.obs_data()
+	defer obsSettings.Release()
+	// #cgo noescape obs_output_update
+	// #cgo nocallback obs_output_update
+	return C.obs_output_update(o.c, obsSettings)
+}
+
 func (o Output) Events(ctx context.Context) <-chan SignalOutput {
 	ch := make(chan SignalOutput, 8)
 
