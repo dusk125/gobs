@@ -114,7 +114,7 @@ func (o Output) Update(settings Data) {
 	defer obsSettings.Release()
 	// #cgo noescape obs_output_update
 	// #cgo nocallback obs_output_update
-	return C.obs_output_update(o.c, obsSettings)
+	C.obs_output_update(o.c, obsSettings.obs_data_t)
 }
 
 func (o Output) Events(ctx context.Context) <-chan SignalOutput {

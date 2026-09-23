@@ -29,7 +29,7 @@ func (s Service) Update(settings Data) {
 	defer obsSettings.Release()
 	// #cgo noescape obs_service_update
 	// #cgo nocallback obs_service_update
-	return C.obs_service_update(s.c, obsSettings)
+	C.obs_service_update(s.c, obsSettings.obs_data_t)
 }
 
 func ServiceCreate(id, name string, settings, hotkeys Data) Service {
