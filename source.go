@@ -136,15 +136,3 @@ func (s Source) SetMuted(muted bool) {
 	// #cgo nocallback obs_source_set_muted
 	C.obs_source_set_muted(s.c, C.bool(muted))
 }
-
-func (s Source) MediaTime() int64 {
-	// #cgo noescape obs_source_media_get_time
-	// #cgo nocallback obs_source_media_get_time
-	return int64(C.obs_source_media_get_time(s.c))
-}
-
-func (s Source) MediaDuration() int64 {
-	// #cgo noescape obs_source_media_get_duration
-	// #cgo nocallback obs_source_media_get_duration
-	return int64(C.obs_source_media_get_duration(s.c))
-}
