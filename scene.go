@@ -272,6 +272,15 @@ const (
 	BOUNDS_MAX_ONLY                          // Scales with aspect ratio, but only to the size of the source maximum
 )
 
+type OrderMovement uint32
+
+const (
+	ORDER_MOVE_UP OrderMovement = iota
+	ORDER_MOVE_DOWN
+	ORDER_MOVE_TOP
+	ORDER_MOVE_BOTTOM
+)
+
 type SceneItem struct {
 	c *C.obs_sceneitem_t
 }
@@ -352,4 +361,10 @@ func (si SceneItem) SetPosition(pos Vec2) {
 	// #cgo noescape obs_sceneitem_set_pos
 	// #cgo nocallback obs_sceneitem_set_pos
 	C.obs_sceneitem_set_pos(si.c, (*C.struct_vec2)(unsafe.Pointer(&pos)))
+}
+
+func (si SceneItem) SetOrder(movement OrderMovement) {
+	// #cgo noescape obs_sceneitem_set_order
+	// #cgo nocallback obs_sceneitem_set_order
+	C.obs_sceneitem_set_order(si.c, uint32(movement))
 }
