@@ -2,6 +2,7 @@ package gobs
 
 // #include <obs/obs.h>
 import "C"
+import "unsafe"
 
 type Source struct {
 	c *C.obs_source_t
@@ -135,4 +136,19 @@ func (s Source) SetMuted(muted bool) {
 	// #cgo noescape obs_source_set_muted
 	// #cgo nocallback obs_source_set_muted
 	C.obs_source_set_muted(s.c, C.bool(muted))
+}
+
+func (s Source) PressButton(name string) bool {
+	props := C.obs_source_properties(s.c)
+	if props == nil {
+		return false
+	}
+	defer C.obs_properties_destroy(props)
+
+	p := C.obs_properties_get(props, fromString(name).cptr())
+	if p == nil {
+		return false
+	}
+	C.obs_property_button_clicked(p, unsafe.Pointer(s.c))
+	return true
 }
