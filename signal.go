@@ -58,8 +58,6 @@ type SignalConnection struct {
 }
 
 func (sc SignalConnection) Disconnect() {
-	// #cgo noescape signal_handler_disconnect
-	// #cgo nocallback signal_handler_disconnect
 	C.signal_handler_disconnect(sc.handler.c, sc.name, (*[0]byte)(C.signal_cb), unsafe.Pointer(sc.handle))
 	(*sc.handle).Delete()
 	C.free(unsafe.Pointer(sc.name))

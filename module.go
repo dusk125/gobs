@@ -41,8 +41,6 @@ func (m Module) Valid() bool {
 }
 
 func (m Module) Init() error {
-	// #cgo noescape obs_init_module
-	// #cgo nocallback obs_init_module
 	if bool(C.obs_init_module(m.c)) {
 		return nil
 	}
@@ -52,8 +50,6 @@ func (m Module) Init() error {
 func OpenModule(path, dataPath string) (module Module, err error) {
 	cpath := fromString(path).cptr()
 	cdatapath := fromString(dataPath).cptr()
-	// #cgo noescape obs_open_module
-	// #cgo nocallback obs_open_module
 	switch C.obs_open_module(&module.c, cpath, cdatapath) {
 	case 0:
 		return
@@ -73,8 +69,6 @@ func OpenModule(path, dataPath string) (module Module, err error) {
 }
 
 func AddModulePath(path, dataPath string) {
-	// #cgo noescape obs_add_module_path
-	// #cgo nocallback obs_add_module_path
 	C.obs_add_module_path(fromString(path).cptr(), fromString(dataPath).cptr())
 }
 
@@ -94,19 +88,13 @@ func FindModules() iter.Seq[*ModuleInfo] {
 }
 
 func LoadAllModules() {
-	// #cgo noescape obs_load_all_modules
-	// #cgo nocallback obs_load_all_modules
 	C.obs_load_all_modules()
 }
 
 func PostLoadModules() {
-	// #cgo noescape obs_post_load_modules
-	// #cgo nocallback obs_post_load_modules
 	C.obs_post_load_modules()
 }
 
 func LogLoadedModules() {
-	// #cgo noescape obs_log_loaded_modules
-	// #cgo nocallback obs_log_loaded_modules
 	C.obs_log_loaded_modules()
 }

@@ -26,8 +26,6 @@ type AudioInfo struct {
 }
 
 func ResetAudio(info *AudioInfo) error {
-	// #cgo noescape obs_reset_audio
-	// #cgo nocallback obs_reset_audio
 	if bool(C.obs_reset_audio((*C.struct_obs_audio_info)(unsafe.Pointer(info)))) {
 		return nil
 	}
@@ -42,8 +40,6 @@ type AudioInfo2 struct {
 }
 
 func ResetAudio2(info *AudioInfo2) error {
-	// #cgo noescape obs_reset_audio2
-	// #cgo nocallback obs_reset_audio2
 	if bool(C.obs_reset_audio2((*C.struct_obs_audio_info2)(unsafe.Pointer(info)))) {
 		return nil
 	}

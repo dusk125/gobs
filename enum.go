@@ -21,7 +21,6 @@ func sources_cb(p unsafe.Pointer, s *C.obs_source_t) C.bool {
 }
 
 func Sources() iter.Seq[Source] {
-	// #cgo noescape obs_enum_sources
 	return func(yield func(Source) bool) {
 		h := cgo.NewHandle(yield)
 		defer h.Delete()
@@ -30,8 +29,6 @@ func Sources() iter.Seq[Source] {
 }
 
 func SourceTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_source_types
-	// #cgo nocallback obs_enum_source_types
 	return func(yield func(string) bool) {
 		var s *CString
 
@@ -44,8 +41,6 @@ func SourceTypes() iter.Seq[string] {
 }
 
 func InputTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_input_types
-	// #cgo nocallback obs_enum_input_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_input_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {
@@ -57,8 +52,6 @@ func InputTypes() iter.Seq[string] {
 }
 
 func FilterTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_filter_types
-	// #cgo nocallback obs_enum_filter_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_filter_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {
@@ -70,8 +63,6 @@ func FilterTypes() iter.Seq[string] {
 }
 
 func TransitionTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_transition_types
-	// #cgo nocallback obs_enum_transition_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_transition_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {
@@ -83,8 +74,6 @@ func TransitionTypes() iter.Seq[string] {
 }
 
 func OutputTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_output_types
-	// #cgo nocallback obs_enum_output_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_output_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {
@@ -96,8 +85,6 @@ func OutputTypes() iter.Seq[string] {
 }
 
 func EncoderTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_encoder_types
-	// #cgo nocallback obs_enum_encoder_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_encoder_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {
@@ -109,8 +96,6 @@ func EncoderTypes() iter.Seq[string] {
 }
 
 func ServiceTypes() iter.Seq[string] {
-	// #cgo noescape obs_enum_service_types
-	// #cgo nocallback obs_enum_service_types
 	return func(yield func(string) bool) {
 		var s *CString
 		for i := C.size_t(0); C.obs_enum_service_types(i, (**C.char)(unsafe.Pointer(&s))); i++ {

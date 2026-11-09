@@ -17,14 +17,10 @@ func (o Output) Valid() bool {
 }
 
 func (o Output) Release() {
-	// #cgo noescape obs_output_release
-	// #cgo nocallback obs_output_release
 	C.obs_output_release(o.c)
 }
 
 func (o Output) Start() error {
-	// #cgo noescape obs_output_start
-	// #cgo nocallback obs_output_start
 	if bool(C.obs_output_start(o.c)) {
 		return nil
 	}
@@ -32,88 +28,60 @@ func (o Output) Start() error {
 }
 
 func (o Output) Stop() {
-	// #cgo noescape obs_output_stop
-	// #cgo nocallback obs_output_stop
 	C.obs_output_stop(o.c)
 }
 
 func (o Output) ForceStop() {
-	// #cgo noescape obs_output_force_stop
-	// #cgo nocallback obs_output_force_stop
 	C.obs_output_force_stop(o.c)
 }
 
 func (o Output) Active() bool {
-	// #cgo noescape obs_output_active
-	// #cgo nocallback obs_output_active
 	return bool(C.obs_output_active(o.c))
 }
 
 func (o Output) SetVideoEncoder(enc Encoder) {
-	// #cgo noescape obs_output_set_video_encoder
-	// #cgo nocallback obs_output_set_video_encoder
 	C.obs_output_set_video_encoder(o.c, enc.c)
 }
 
 func (o Output) SetAudioEncoder(enc Encoder, idx int) {
-	// #cgo noescape obs_output_set_audio_encoder
-	// #cgo nocallback obs_output_set_audio_encoder
 	C.obs_output_set_audio_encoder(o.c, enc.c, C.size_t(idx))
 }
 
 func (o Output) SetService(serv Service) {
-	// #cgo noescape obs_output_set_service
-	// #cgo nocallback obs_output_set_service
 	C.obs_output_set_service(o.c, serv.c)
 }
 
 func (o Output) SetPreferredSize(width, height uint32) {
-	// #cgo noescape obs_output_set_preferred_size
-	// #cgo nocallback obs_output_set_preferred_size
 	C.obs_output_set_preferred_size(o.c, C.uint32_t(width), C.uint32_t(height))
 }
 
 func (o Output) Error() string {
-	// #cgo noescape obs_output_get_last_error
-	// #cgo nocallback obs_output_get_last_error
 	return C.GoString(C.obs_output_get_last_error(o.c))
 }
 
 func (o Output) SignalHandler() SignalHandler {
-	// #cgo noescape obs_output_get_signal_handler
-	// #cgo nocallback obs_output_get_signal_handler
 	return SignalHandler{C.obs_output_get_signal_handler(o.c)}
 }
 
 func (o Output) TotalBytes() uint64 {
-	// #cgo noescape obs_output_get_total_bytes
-	// #cgo nocallback obs_output_get_total_bytes
 	return uint64(C.obs_output_get_total_bytes(o.c))
 }
 
 func (o Output) FramesDropped() int32 {
-	// #cgo noescape obs_output_get_frames_dropped
-	// #cgo nocallback obs_output_get_frames_dropped
 	return int32(C.obs_output_get_frames_dropped(o.c))
 }
 
 func (o Output) TotalFrames() int32 {
-	// #cgo noescape obs_output_get_total_frames
-	// #cgo nocallback obs_output_get_total_frames
 	return int32(C.obs_output_get_total_frames(o.c))
 }
 
 func (o Output) Reconnecting() bool {
-	// #cgo noescape obs_output_reconnecting
-	// #cgo nocallback obs_output_reconnecting
 	return bool(C.obs_output_reconnecting(o.c))
 }
 
 func (o Output) Update(settings Data) {
 	obsSettings := settings.obs_data()
 	defer obsSettings.Release()
-	// #cgo noescape obs_output_update
-	// #cgo nocallback obs_output_update
 	C.obs_output_update(o.c, obsSettings.obs_data_t)
 }
 
@@ -189,24 +157,18 @@ func (o Output) Events(ctx context.Context) <-chan SignalOutput {
 func OutputDefaults(id string) Data {
 	cid := fromString(id)
 
-	// #cgo noescape obs_output_defaults
-	// #cgo nocallback obs_output_defaults
 	d := obs_data{C.obs_output_defaults(cid.cptr())}
 	defer d.Release()
 	return d.MapWithDefaults()
 }
 
 func SetOutputSource(channel uint32, source Source) {
-	// #cgo noescape obs_set_output_source
-	// #cgo nocallback obs_set_output_source
 	C.obs_set_output_source(C.uint32_t(channel), source.c)
 }
 
 // Gets the primary output source for a channel and increments the reference counter for that source.
 // Use Source.Release() to release.
 func OutputSource(channel uint32) (Source, Releaser) {
-	// #cgo noescape obs_get_output_source
-	// #cgo nocallback obs_get_output_source
 	src := Source{C.obs_get_output_source(C.uint32_t(channel))}
 	return src, src.Release
 }
@@ -220,8 +182,6 @@ func OutputCreate(id string, name string, settings Data, hotkeys Data) (Output, 
 	defer obsSettings.Release()
 	defer obsHotkeys.Release()
 
-	// #cgo noescape obs_output_create
-	// #cgo nocallback obs_output_create
 	out := Output{C.obs_output_create(cid, cname, obsSettings.obs_data_t, obsHotkeys.obs_data_t)}
 	if out.c == nil {
 		panic("failed to create output")

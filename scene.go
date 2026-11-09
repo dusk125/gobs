@@ -18,8 +18,6 @@ import (
 type Releaser func()
 
 func SceneCreate(name string) (Scene, Releaser) {
-	// #cgo noescape obs_scene_create
-	// #cgo nocallback obs_scene_create
 	scene := Scene{C.obs_scene_create(fromString(name).cptr())}
 	if scene.c == nil {
 		panic("failed to create scene")
@@ -28,8 +26,6 @@ func SceneCreate(name string) (Scene, Releaser) {
 }
 
 func SceneFromSource(s Source) Scene {
-	// #cgo noescape obs_scene_from_source
-	// #cgo nocallback obs_scene_from_source
 	return Scene{C.obs_scene_from_source(s.c)}
 }
 
@@ -42,31 +38,21 @@ func (s Scene) Valid() bool {
 }
 
 func (s Scene) Release() {
-	// #cgo noescape obs_scene_release
-	// #cgo nocallback obs_scene_release
 	C.obs_scene_release(s.c)
 }
 
 func (s Scene) Add(source Source) SceneItem {
-	// #cgo noescape obs_scene_add
-	// #cgo nocallback obs_scene_add
 	return SceneItem{C.obs_scene_add(s.c, source.c)}
 }
 
 func (s Scene) Source() Source {
-	// #cgo noescape obs_scene_get_source
-	// #cgo nocallback obs_scene_get_source
 	return Source{C.obs_scene_get_source(s.c)}
 }
 
 func (s Scene) FindSource(name string, recursive bool) SceneItem {
 	if recursive {
-		// #cgo noescape obs_scene_find_source_recursive
-		// #cgo nocallback obs_scene_find_source_recursive
 		return SceneItem{C.obs_scene_find_source_recursive(s.c, fromString(name).cptr())}
 	}
-	// #cgo noescape obs_scene_find_source
-	// #cgo nocallback obs_scene_find_source
 	return SceneItem{C.obs_scene_find_source(s.c, fromString(name).cptr())}
 }
 
@@ -83,14 +69,11 @@ func (s Scene) Items() iter.Seq[SceneItem] {
 		h := cgo.NewHandle(yield)
 		defer h.Delete()
 
-		// #cgo noescape obs_scene_enum_items
 		C.obs_scene_enum_items(s.c, (*[0]byte)(C.scene_items_cb), unsafe.Pointer(&h))
 	}
 }
 
 func (s Scene) ReorderItems(items []SceneItem) bool {
-	// #cgo noescape obs_scene_reorder_items
-	// #cgo nocallback obs_scene_reorder_items
 	return bool(C.obs_scene_reorder_items(s.c, (**C.obs_sceneitem_t)(unsafe.Pointer(unsafe.SliceData(items))), C.size_t(len(items))))
 }
 
@@ -104,8 +87,6 @@ const (
 )
 
 func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) (Scene, Releaser) {
-	// #cgo noescape obs_scene_duplicate
-	// #cgo nocallback obs_scene_duplicate
 	scene := Scene{C.obs_scene_duplicate(s.c, fromString(name).cptr(), C.enum_obs_scene_duplicate_type(duplicateType))}
 	return scene, scene.Release
 }
@@ -293,81 +274,55 @@ func (si SceneItem) Valid() bool {
 }
 
 func (si SceneItem) Release() {
-	// #cgo noescape obs_sceneitem_release
-	// #cgo nocallback obs_sceneitem_release
 	C.obs_sceneitem_release(si.c)
 }
 
 func (si SceneItem) Remove() {
-	// #cgo noescape obs_sceneitem_remove
-	// #cgo nocallback obs_sceneitem_remove
 	C.obs_sceneitem_remove(si.c)
 }
 
 func (si SceneItem) BoundsType() BoundsType {
-	// #cgo noescape obs_sceneitem_get_bounds_type
-	// #cgo nocallback obs_sceneitem_get_bounds_type
 	return BoundsType(C.obs_sceneitem_get_bounds_type(si.c))
 }
 
 func (si SceneItem) SetBoundsType(tipe BoundsType) {
-	// #cgo noescape obs_sceneitem_set_bounds_type
-	// #cgo nocallback obs_sceneitem_set_bounds_type
 	C.obs_sceneitem_set_bounds_type(si.c, uint32(tipe))
 }
 
 func (si SceneItem) Bounds() (v Vec2) {
-	// #cgo noescape obs_sceneitem_get_bounds
-	// #cgo nocallback obs_sceneitem_get_bounds
 	C.obs_sceneitem_get_bounds(si.c, (*C.struct_vec2)(unsafe.Pointer(&v)))
 	return
 }
 
 func (si SceneItem) SetBounds(v Vec2) {
-	// #cgo noescape obs_sceneitem_set_bounds
-	// #cgo nocallback obs_sceneitem_set_bounds
 	C.obs_sceneitem_set_bounds(si.c, (*C.struct_vec2)(unsafe.Pointer(&v)))
 }
 
 func (si SceneItem) Scene() Scene {
-	// #cgo noescape obs_sceneitem_get_scene
-	// #cgo nocallback obs_sceneitem_get_scene
 	return Scene{C.obs_sceneitem_get_scene(si.c)}
 }
 
 func (si SceneItem) Source() Source {
-	// #cgo noescape obs_sceneitem_get_source
-	// #cgo nocallback obs_sceneitem_get_source
 	return Source{C.obs_sceneitem_get_source(si.c)}
 }
 
 func (si SceneItem) Visible() bool {
-	// #cgo noescape obs_sceneitem_visible
-	// #cgo nocallback obs_sceneitem_visible
 	return bool(C.obs_sceneitem_visible(si.c))
 }
 
 func (si SceneItem) SetVisible(visible bool) {
-	// #cgo noescape obs_sceneitem_set_visible
-	// #cgo nocallback obs_sceneitem_set_visible
 	C.obs_sceneitem_set_visible(si.c, C.bool(visible))
 }
 
 func (si SceneItem) Position() (pos Vec2) {
-	// #cgo noescape obs_sceneitem_get_pos
-	// #cgo nocallback obs_sceneitem_get_pos
 	C.obs_sceneitem_get_pos(si.c, (*C.struct_vec2)(unsafe.Pointer(&pos)))
 	return
 }
 
 func (si SceneItem) SetPosition(pos Vec2) {
-	// #cgo noescape obs_sceneitem_set_pos
-	// #cgo nocallback obs_sceneitem_set_pos
 	C.obs_sceneitem_set_pos(si.c, (*C.struct_vec2)(unsafe.Pointer(&pos)))
 }
 
 func (si SceneItem) SetOrder(movement OrderMovement) {
-	// #cgo noescape obs_sceneitem_set_order
-	// #cgo nocallback obs_sceneitem_set_order
 	C.obs_sceneitem_set_order(si.c, uint32(movement))
 }

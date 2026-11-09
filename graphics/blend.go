@@ -4,14 +4,10 @@ package graphics
 import "C"
 
 func BlendStatePush() {
-	// #cgo noescape gs_blend_state_push
-	// #cgo nocallback gs_blend_state_push
 	C.gs_blend_state_push()
 }
 
 func BlendStatePop() {
-	// #cgo noescape gs_blend_state_pop
-	// #cgo nocallback gs_blend_state_pop
 	C.gs_blend_state_pop()
 }
 
@@ -32,7 +28,5 @@ const (
 )
 
 func BlendFunction(src, dest BlendType) {
-	// #cgo noescape gs_blend_function
-	// #cgo nocallback gs_blend_function
 	C.gs_blend_function(C.enum_gs_blend_type(src), C.enum_gs_blend_type(dest))
 }

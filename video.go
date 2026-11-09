@@ -129,8 +129,6 @@ type VideoInfo struct {
 }
 
 func ResetVideo(info *VideoInfo) error {
-	// #cgo noescape obs_reset_video
-	// #cgo nocallback obs_reset_video
 	err := C.obs_reset_video((*C.struct_obs_video_info)(unsafe.Pointer(info)))
 	switch err {
 	case 0:

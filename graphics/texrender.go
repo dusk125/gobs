@@ -45,8 +45,6 @@ const (
 )
 
 func TexRenderCreate(format ColorFormat, zsformat ZStencilFormat) TexRender {
-	// #cgo noescape gs_texrender_create
-	// #cgo nocallback gs_texrender_create
 	return TexRender{C.gs_texrender_create(C.enum_gs_color_format(format), C.enum_gs_zstencil_format(zsformat))}
 }
 
@@ -55,31 +53,21 @@ func (t TexRender) Valid() bool {
 }
 
 func (t TexRender) Destroy() {
-	// #cgo noescape gs_texrender_destroy
-	// #cgo nocallback gs_texrender_destroy
 	C.gs_texrender_destroy(t.c)
 }
 
 func (t TexRender) Reset() {
-	// #cgo noescape gs_texrender_reset
-	// #cgo nocallback gs_texrender_reset
 	C.gs_texrender_reset(t.c)
 }
 
 func (t TexRender) Begin(width, height uint32) bool {
-	// #cgo noescape gs_texrender_begin
-	// #cgo nocallback gs_texrender_begin
 	return bool(C.gs_texrender_begin(t.c, C.uint32_t(width), C.uint32_t(height)))
 }
 
 func (t TexRender) End() {
-	// #cgo noescape gs_texrender_end
-	// #cgo nocallback gs_texrender_end
 	C.gs_texrender_end(t.c)
 }
 
 func (t TexRender) Texture() Texture {
-	// #cgo noescape gs_texrender_get_texture
-	// #cgo nocallback gs_texrender_get_texture
 	return Texture{C.gs_texrender_get_texture(t.c)}
 }
