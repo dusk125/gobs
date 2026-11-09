@@ -4,6 +4,14 @@ package gobs
 #include <obs/obs.h>
 
 extern void main_render_cb(void *, uint32_t, uint32_t);
+
+static void gobs_main_render_add(uintptr_t data) {
+	obs_add_main_render_callback(main_render_cb, (void *)data);
+}
+
+static void gobs_main_render_remove(uintptr_t data) {
+	obs_remove_main_render_callback(main_render_cb, (void *)data);
+}
 */
 import "C"
 
@@ -21,23 +29,23 @@ type internal_render_calldata struct {
 
 //export main_render_cb
 func main_render_cb(data unsafe.Pointer, cx C.uint32_t, cy C.uint32_t) {
-	h := *(*cgo.Handle)(data)
+	h := cgo.Handle(uintptr(data))
 	v := h.Value().(*internal_render_calldata)
 
 	v.callback(v.data, uint32(cx), uint32(cy))
 }
 
 type RenderConnection struct {
-	handle *cgo.Handle
+	handle cgo.Handle
 }
 
 func AddMainRenderCallback(callback RenderCallback, data any) RenderConnection {
 	handle := cgo.NewHandle(&internal_render_calldata{callback: callback, data: data})
-	C.obs_add_main_render_callback((*[0]byte)(C.main_render_cb), unsafe.Pointer(&handle))
-	return RenderConnection{handle: &handle}
+	C.gobs_main_render_add(C.uintptr_t(handle))
+	return RenderConnection{handle: handle}
 }
 
 func (rc RenderConnection) Remove() {
-	C.obs_remove_main_render_callback((*[0]byte)(C.main_render_cb), unsafe.Pointer(rc.handle))
-	(*rc.handle).Delete()
+	C.gobs_main_render_remove(C.uintptr_t(rc.handle))
+	rc.handle.Delete()
 }

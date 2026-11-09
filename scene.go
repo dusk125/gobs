@@ -5,6 +5,10 @@ package gobs
 #include <obs/graphics/vec2.h>
 
 extern bool scene_items_cb(obs_scene_t*, obs_sceneitem_t*, void*);
+
+static void gobs_scene_enum_items(obs_scene_t* scene, uintptr_t data) {
+	obs_scene_enum_items(scene, scene_items_cb, (void *)data);
+}
 */
 import "C"
 
@@ -58,7 +62,7 @@ func (s Scene) FindSource(name string, recursive bool) SceneItem {
 
 //export scene_items_cb
 func scene_items_cb(_ *C.obs_scene_t, item *C.obs_sceneitem_t, p unsafe.Pointer) C.bool {
-	h := (*cgo.Handle)(p)
+	h := cgo.Handle(uintptr(p))
 	yield := h.Value().(func(SceneItem) bool)
 
 	return C.bool(yield(SceneItem{item}))
@@ -69,7 +73,7 @@ func (s Scene) Items() iter.Seq[SceneItem] {
 		h := cgo.NewHandle(yield)
 		defer h.Delete()
 
-		C.obs_scene_enum_items(s.c, (*[0]byte)(C.scene_items_cb), unsafe.Pointer(&h))
+		C.gobs_scene_enum_items(s.c, C.uintptr_t(h))
 	}
 }
 

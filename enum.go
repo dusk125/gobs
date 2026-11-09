@@ -4,6 +4,10 @@ package gobs
 #include <obs/obs.h>
 
 bool sources_cb(void*, obs_source_t*);
+
+static void gobs_enum_sources(uintptr_t data) {
+	obs_enum_sources(sources_cb, (void *)data);
+}
 */
 import "C"
 
@@ -15,7 +19,8 @@ import (
 
 //export sources_cb
 func sources_cb(p unsafe.Pointer, s *C.obs_source_t) C.bool {
-	yield := (*cgo.Handle)(p).Value().(func(Source) bool)
+	h := cgo.Handle(uintptr(p))
+	yield := h.Value().(func(Source) bool)
 
 	return C.bool(yield(Source{s}))
 }
@@ -24,7 +29,7 @@ func Sources() iter.Seq[Source] {
 	return func(yield func(Source) bool) {
 		h := cgo.NewHandle(yield)
 		defer h.Delete()
-		C.obs_enum_sources((*[0]byte)(C.sources_cb), unsafe.Pointer(&h))
+		C.gobs_enum_sources(C.uintptr_t(h))
 	}
 }
 

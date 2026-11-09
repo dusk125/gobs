@@ -10,13 +10,13 @@ func Startup(locale string, args ...string) bool {
 	cLocale := C.CString(locale)
 	defer C.free(unsafe.Pointer(cLocale))
 
-	argc := C.int(len(args))
-	argv := make([]*C.char, len(args))
+	argv := make([]*C.char, len(args)+1)
 	for i, arg := range args {
 		argv[i] = C.CString(arg)
+		defer C.free(unsafe.Pointer(argv[i]))
 	}
 
-	C.obs_set_cmdline_args(argc, &argv[0])
+	C.obs_set_cmdline_args(C.int(len(args)), unsafe.SliceData(argv))
 
 	return bool(C.obs_startup(cLocale, nil, nil))
 }

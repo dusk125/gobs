@@ -3,7 +3,11 @@ package gobs
 /*
 #include <obs/obs.h>
 
-extern void findModulesCB(void*, struct obs_module_info2*);
+extern void find_modules_cb(void*, struct obs_module_info2*);
+
+static void gobs_find_modules(uintptr_t data) {
+	obs_find_modules2((obs_find_module_callback2_t)find_modules_cb, (void *)data);
+}
 */
 import "C"
 
@@ -72,18 +76,23 @@ func AddModulePath(path, dataPath string) {
 	C.obs_add_module_path(fromString(path).cptr(), fromString(dataPath).cptr())
 }
 
-//export findModulesCB
-func findModulesCB(p unsafe.Pointer, mi *C.struct_obs_module_info2) {
-	h := (*cgo.Handle)(p)
-	yield := h.Value().(func(*ModuleInfo) bool)
-	yield((*ModuleInfo)(unsafe.Pointer(mi)))
+//export find_modules_cb
+func find_modules_cb(p unsafe.Pointer, mi *C.struct_obs_module_info2) {
+	h := cgo.Handle(uintptr(p))
+	find := h.Value().(func(*ModuleInfo))
+	find((*ModuleInfo)(unsafe.Pointer(mi)))
 }
 
 func FindModules() iter.Seq[*ModuleInfo] {
 	return func(yield func(*ModuleInfo) bool) {
-		h := cgo.NewHandle(yield)
+		done := false
+		h := cgo.NewHandle(func(mi *ModuleInfo) {
+			if !done {
+				done = !yield(mi)
+			}
+		})
 		defer h.Delete()
-		C.obs_find_modules2((*[0]byte)(C.findModulesCB), unsafe.Pointer(&h))
+		C.gobs_find_modules(C.uintptr_t(h))
 	}
 }
 
