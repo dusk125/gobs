@@ -92,10 +92,10 @@ func main() {
 	}
 
 	col := colornames.Cornflowerblue
-	color := gobs.SourceCreate("color_source_v3", "hi", gobs.Data{
+	color, release := gobs.SourceCreate("color_source_v3", "hi", gobs.Data{
 		"color": binary.NativeEndian.Uint32([]byte{col.R, col.G, col.B, col.A}),
 	}, nil)
-	defer color.Release()
+	defer release()
 
 	vlcData := gobs.SourceDefaults("vlc_source")
 	vlcData["loop"] = false
@@ -106,8 +106,8 @@ func main() {
 		},
 	}
 
-	vlc := gobs.SourceCreate("vlc_source", "vlc", vlcData, nil)
-	defer vlc.Release()
+	vlc, release := gobs.SourceCreate("vlc_source", "vlc", vlcData, nil)
+	defer release()
 
 	browserData := gobs.SourceDefaults("browser_source")
 	browserData["url"] = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -117,11 +117,11 @@ func main() {
 	browserData["reroute_audio"] = true
 	// browserData["restart_when_active"] = true
 
-	browser := gobs.SourceCreate("browser_source", "browser", browserData, nil)
-	defer browser.Release()
+	browser, release := gobs.SourceCreate("browser_source", "browser", browserData, nil)
+	defer release()
 
-	scene := gobs.SceneCreate("scene")
-	defer scene.Release()
+	scene, release := gobs.SceneCreate("scene")
+	defer release()
 
 	defer scene.Add(color).Remove()
 	{
@@ -152,24 +152,24 @@ func main() {
 		"profile": "main",
 		"tune":    "zerolatency",
 	}
-	video := gobs.VideoEncoderCreate("obs_x264", "video-enc", videoData, nil)
-	defer video.Release()
+	video, release := gobs.VideoEncoderCreate("obs_x264", "video-enc", videoData, nil)
+	defer release()
 
 	audioData := gobs.Data{
 		"bitrate": 128,
 	}
-	audio := gobs.AudioEncoderCreate("ffmpeg_aac", "audio-enc", 0, audioData, nil)
-	defer audio.Release()
+	audio, release := gobs.AudioEncoderCreate("ffmpeg_aac", "audio-enc", 0, audioData, nil)
+	defer release()
 
 	serviceData := gobs.Data{
 		"server": "rtmp://localhost:1935/host/",
 		"key":    "test",
 	}
-	serv := gobs.ServiceCreate("rtmp_custom", "service", serviceData, nil)
-	defer serv.Release()
+	serv, release := gobs.ServiceCreate("rtmp_custom", "service", serviceData, nil)
+	defer release()
 
-	out := gobs.OutputCreate("rtmp_output", "out", gobs.Data{}, nil)
-	defer out.Release()
+	out, release := gobs.OutputCreate("rtmp_output", "out", gobs.Data{}, nil)
+	defer release()
 
 	video.SetVideo(gobs.GetVideo())
 	audio.SetAudio(gobs.GetAudio())

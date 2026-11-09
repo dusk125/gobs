@@ -40,7 +40,7 @@ func TransitionDefaults(id string) Data {
 	return data.MapWithDefaults()
 }
 
-func TransitionCreate(id, name string, settings, hotkeys Data) Transition {
+func TransitionCreate(id, name string, settings, hotkeys Data) (Transition, Releaser) {
 	var (
 		obsSettings obs_data
 		obsHotkeys  obs_data
@@ -61,7 +61,7 @@ func TransitionCreate(id, name string, settings, hotkeys Data) Transition {
 	if t.c == nil {
 		panic("failed to create transition")
 	}
-	return t
+	return t, t.Release
 }
 
 func (t Transition) Start(mode TransitionMode, duration time.Duration, dest Source) bool {
@@ -82,16 +82,18 @@ func (t Transition) Clear() {
 	C.obs_transition_clear(t.c)
 }
 
-func (t Transition) GetActiveSource() Source {
+func (t Transition) GetActiveSource() (Source, Releaser) {
 	// #cgo noescape obs_transition_get_active_source
 	// #cgo nocallback obs_transition_get_active_source
-	return Source{C.obs_transition_get_active_source(t.c)}
+	src := Source{C.obs_transition_get_active_source(t.c)}
+	return src, src.Release
 }
 
-func (t Transition) GetSource(target TransitionTarget) Source {
+func (t Transition) GetSource(target TransitionTarget) (Source, Releaser) {
 	// #cgo noescape obs_transition_get_source
 	// #cgo nocallback obs_transition_get_source
-	return Source{C.obs_transition_get_source(t.c, C.enum_obs_transition_target(target))}
+	src := Source{C.obs_transition_get_source(t.c, C.enum_obs_transition_target(target))}
+	return src, src.Release
 }
 
 func (t Transition) SetScaleType(st TransitionScaleType) {

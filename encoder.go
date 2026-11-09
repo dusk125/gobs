@@ -61,7 +61,7 @@ func EncoderDefaults(id string) Data {
 	return d.MapWithDefaults()
 }
 
-func VideoEncoderCreate(id string, name string, settings Data, hotkeys Data) Encoder {
+func VideoEncoderCreate(id string, name string, settings Data, hotkeys Data) (Encoder, Releaser) {
 	cid := C.CString(id)
 	cname := C.CString(name)
 
@@ -78,10 +78,10 @@ func VideoEncoderCreate(id string, name string, settings Data, hotkeys Data) Enc
 	if enc.c == nil {
 		panic("failed to create video encoder")
 	}
-	return enc
+	return enc, enc.Release
 }
 
-func AudioEncoderCreate(id string, name string, mixerIndex int, settings Data, hotkeys Data) Encoder {
+func AudioEncoderCreate(id string, name string, mixerIndex int, settings Data, hotkeys Data) (Encoder, Releaser) {
 	cid := C.CString(id)
 	cname := C.CString(name)
 
@@ -100,5 +100,5 @@ func AudioEncoderCreate(id string, name string, mixerIndex int, settings Data, h
 	if enc.c == nil {
 		panic("failed to create audio encoder")
 	}
-	return enc
+	return enc, enc.Release
 }

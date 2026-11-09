@@ -15,14 +15,16 @@ import (
 	"unsafe"
 )
 
-func SceneCreate(name string) Scene {
+type Releaser func()
+
+func SceneCreate(name string) (Scene, Releaser) {
 	// #cgo noescape obs_scene_create
 	// #cgo nocallback obs_scene_create
 	scene := Scene{C.obs_scene_create(fromString(name).cptr())}
 	if scene.c == nil {
 		panic("failed to create scene")
 	}
-	return scene
+	return scene, scene.Release
 }
 
 func SceneFromSource(s Source) Scene {
@@ -101,10 +103,11 @@ const (
 	SceneDupPrivateCopy SceneDuplicateType = C.OBS_SCENE_DUP_PRIVATE_COPY // Fully duplicates scene items when possible, but the scene and duplicates sources are private sources
 )
 
-func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) Scene {
+func (s Scene) Duplicate(name string, duplicateType SceneDuplicateType) (Scene, Releaser) {
 	// #cgo noescape obs_scene_duplicate
 	// #cgo nocallback obs_scene_duplicate
-	return Scene{C.obs_scene_duplicate(s.c, fromString(name).cptr(), C.enum_obs_scene_duplicate_type(duplicateType))}
+	scene := Scene{C.obs_scene_duplicate(s.c, fromString(name).cptr(), C.enum_obs_scene_duplicate_type(duplicateType))}
+	return scene, scene.Release
 }
 
 func (s Scene) Events(ctx context.Context) <-chan SignalScene {

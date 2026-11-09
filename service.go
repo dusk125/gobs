@@ -32,7 +32,7 @@ func (s Service) Update(settings Data) {
 	C.obs_service_update(s.c, obsSettings.obs_data_t)
 }
 
-func ServiceCreate(id, name string, settings, hotkeys Data) Service {
+func ServiceCreate(id, name string, settings, hotkeys Data) (Service, Releaser) {
 	cid := C.CString(id)
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cid))
@@ -49,7 +49,7 @@ func ServiceCreate(id, name string, settings, hotkeys Data) Service {
 	if service.c == nil {
 		panic("failed to create service")
 	}
-	return service
+	return service, service.Release
 }
 
 func ServiceDefaults(id string) Data {

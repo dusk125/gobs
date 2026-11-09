@@ -21,7 +21,7 @@ func SourceDefaults(id string) Data {
 // Creates a source of the specified type with the specified settings.
 // The “source” context is used for anything related to presenting or modifying video/audio.
 // Use Source.Release() to release it.
-func SourceCreate(id string, name string, settings Data, hotkey Data) Source {
+func SourceCreate(id string, name string, settings Data, hotkey Data) (Source, Releaser) {
 	var (
 		obsSettings obs_data
 		obsHotkey   obs_data
@@ -42,7 +42,7 @@ func SourceCreate(id string, name string, settings Data, hotkey Data) Source {
 	if source.c == nil {
 		panic("failed to create source")
 	}
-	return source
+	return source, source.Release
 }
 
 func (s Source) Valid() bool {

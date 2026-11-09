@@ -204,13 +204,14 @@ func SetOutputSource(channel uint32, source Source) {
 
 // Gets the primary output source for a channel and increments the reference counter for that source.
 // Use Source.Release() to release.
-func OutputSource(channel uint32) Source {
+func OutputSource(channel uint32) (Source, Releaser) {
 	// #cgo noescape obs_get_output_source
 	// #cgo nocallback obs_get_output_source
-	return Source{C.obs_get_output_source(C.uint32_t(channel))}
+	src := Source{C.obs_get_output_source(C.uint32_t(channel))}
+	return src, src.Release
 }
 
-func OutputCreate(id string, name string, settings Data, hotkeys Data) Output {
+func OutputCreate(id string, name string, settings Data, hotkeys Data) (Output, Releaser) {
 	cid := fromString(id).cptr()
 	cname := fromString(name).cptr()
 
@@ -225,7 +226,7 @@ func OutputCreate(id string, name string, settings Data, hotkeys Data) Output {
 	if out.c == nil {
 		panic("failed to create output")
 	}
-	return out
+	return out, out.Release
 }
 
 type SignalOutput interface {
