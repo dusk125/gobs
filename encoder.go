@@ -55,7 +55,7 @@ func VideoEncoderCreate(id string, name string, settings Data, hotkeys Data) (En
 	defer C.free(unsafe.Pointer(cname))
 
 	obsSettings := settings.obs_data()
-	obsHotkeys := settings.obs_data()
+	obsHotkeys := hotkeys.obs_data()
 
 	defer obsSettings.Release()
 	defer obsHotkeys.Release()
@@ -75,7 +75,7 @@ func AudioEncoderCreate(id string, name string, mixerIndex int, settings Data, h
 	defer C.free(unsafe.Pointer(cname))
 
 	obsSettings := settings.obs_data()
-	obsHotkeys := settings.obs_data()
+	obsHotkeys := hotkeys.obs_data()
 
 	defer obsSettings.Release()
 	defer obsHotkeys.Release()
