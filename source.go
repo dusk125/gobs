@@ -122,3 +122,8 @@ func (s Source) PressButton(name string) bool {
 	C.obs_property_button_clicked(p, unsafe.Pointer(s.c))
 	return true
 }
+
+func (s Source) GetRef() (Source, Releaser) {
+	src := Source{C.obs_source_get_ref(s.c)}
+	return src, src.Release
+}

@@ -5,9 +5,10 @@ import "C"
 import "context"
 
 func (s Source) Events(ctx context.Context) <-chan SignalSource {
+	src, release := s.GetRef()
 	ch := make(chan SignalSource, 8)
 
-	sh := s.SignalHandler()
+	sh := src.SignalHandler()
 	connections := []SignalConnection{
 		sh.Connect("destroy", func(data any, cd CallData) {
 			data.(chan SignalSource) <- SignalSourceDestroy{
@@ -240,6 +241,7 @@ func (s Source) Events(ctx context.Context) <-chan SignalSource {
 	}
 
 	go func() {
+		defer release()
 		<-ctx.Done()
 		for _, connection := range connections {
 			connection.Disconnect()
