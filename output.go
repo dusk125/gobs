@@ -85,6 +85,11 @@ func (o Output) Update(settings Data) {
 	C.obs_output_update(o.c, obsSettings.obs_data_t)
 }
 
+func (o Output) GetRef() (Output, Releaser) {
+	out := Output{C.obs_output_get_ref(o.c)}
+	return out, out.Release
+}
+
 func (o Output) Events(ctx context.Context) <-chan SignalOutput {
 	ch := make(chan SignalOutput, 8)
 

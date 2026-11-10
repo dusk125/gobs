@@ -41,75 +41,75 @@ func SourceCreate(id string, name string, settings Data, hotkey Data) (Source, R
 	return source, source.Release
 }
 
-func (s Source) Valid() bool {
-	return s.c != nil
+func (src Source) Valid() bool {
+	return src.c != nil
 }
 
-func (s Source) Release() {
-	C.obs_source_release(s.c)
+func (src Source) Release() {
+	C.obs_source_release(src.c)
 }
 
-func (s Source) Remove() {
-	C.obs_source_remove(s.c)
+func (src Source) Remove() {
+	C.obs_source_remove(src.c)
 }
 
-func (s Source) Update(settings Data) {
+func (src Source) Update(settings Data) {
 	d := settings.obs_data()
 	defer d.Release()
 
-	C.obs_source_update(s.c, d.obs_data_t)
+	C.obs_source_update(src.c, d.obs_data_t)
 }
 
-func (s Source) Name() string {
-	return C.GoString(C.obs_source_get_name(s.c))
+func (src Source) Name() string {
+	return C.GoString(C.obs_source_get_name(src.c))
 }
 
-func (s Source) VideoRender() {
-	C.obs_source_video_render(s.c)
+func (src Source) VideoRender() {
+	C.obs_source_video_render(src.c)
 }
 
-func (s Source) IncShowing() {
-	C.obs_source_inc_showing(s.c)
+func (src Source) IncShowing() {
+	C.obs_source_inc_showing(src.c)
 }
 
-func (s Source) DecShowing() {
-	C.obs_source_dec_showing(s.c)
+func (src Source) DecShowing() {
+	C.obs_source_dec_showing(src.c)
 }
 
-func (s Source) Width() uint32 {
-	return uint32(C.obs_source_get_width(s.c))
+func (src Source) Width() uint32 {
+	return uint32(C.obs_source_get_width(src.c))
 }
 
-func (s Source) Height() uint32 {
-	return uint32(C.obs_source_get_height(s.c))
+func (src Source) Height() uint32 {
+	return uint32(C.obs_source_get_height(src.c))
 }
 
-func (s Source) ProcHandler() ProcHandler {
-	return ProcHandler{C.obs_source_get_proc_handler(s.c)}
+func (src Source) ProcHandler() ProcHandler {
+	return ProcHandler{C.obs_source_get_proc_handler(src.c)}
 }
 
-func (s Source) SignalHandler() SignalHandler {
-	return SignalHandler{C.obs_source_get_signal_handler(s.c)}
+func (src Source) SignalHandler() SignalHandler {
+	return SignalHandler{C.obs_source_get_signal_handler(src.c)}
 }
 
-func (s Source) Volume() float32 {
-	return float32(C.obs_source_get_volume(s.c))
+func (src Source) Volume() float32 {
+	return float32(C.obs_source_get_volume(src.c))
 }
 
-func (s Source) SetVolume(vol float32) {
-	C.obs_source_set_volume(s.c, C.float(vol))
+func (src Source) SetVolume(vol float32) {
+	C.obs_source_set_volume(src.c, C.float(vol))
 }
 
-func (s Source) Muted() bool {
-	return bool(C.obs_source_muted(s.c))
+func (src Source) Muted() bool {
+	return bool(C.obs_source_muted(src.c))
 }
 
-func (s Source) SetMuted(muted bool) {
-	C.obs_source_set_muted(s.c, C.bool(muted))
+func (src Source) SetMuted(muted bool) {
+	C.obs_source_set_muted(src.c, C.bool(muted))
 }
 
-func (s Source) PressButton(name string) bool {
-	props := C.obs_source_properties(s.c)
+func (src Source) PressButton(name string) bool {
+	props := C.obs_source_properties(src.c)
 	if props == nil {
 		return false
 	}
@@ -119,7 +119,7 @@ func (s Source) PressButton(name string) bool {
 	if p == nil {
 		return false
 	}
-	C.obs_property_button_clicked(p, unsafe.Pointer(s.c))
+	C.obs_property_button_clicked(p, unsafe.Pointer(src.c))
 	return true
 }
 
