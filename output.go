@@ -91,9 +91,10 @@ func (o Output) GetRef() (Output, Releaser) {
 }
 
 func (o Output) Events(ctx context.Context) <-chan SignalOutput {
+	out, release := o.GetRef()
 	ch := make(chan SignalOutput, 8)
 
-	sh := o.SignalHandler()
+	sh := out.SignalHandler()
 	connections := []SignalConnection{
 		sh.Connect("start", func(data any, cd CallData) {
 			data.(chan SignalOutput) <- SignalOutputStart{
@@ -149,6 +150,7 @@ func (o Output) Events(ctx context.Context) <-chan SignalOutput {
 	}
 
 	go func() {
+		defer release()
 		<-ctx.Done()
 		for _, connection := range connections {
 			connection.Disconnect()
