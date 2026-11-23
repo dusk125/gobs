@@ -28,8 +28,12 @@ func (s MediaSource) Stop() {
 	C.obs_source_media_stop(s.c)
 }
 
-func (s MediaSource) PlayPause() {
-	C.obs_source_media_play_pause(s.c)
+func (s MediaSource) Play() {
+	C.obs_source_media_play_pause(s.c, C.bool(false))
+}
+
+func (s MediaSource) Pause() {
+	C.obs_source_media_play_pause(s.c, C.bool(true))
 }
 
 func (s MediaSource) Next() {
