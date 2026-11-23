@@ -28,6 +28,18 @@ func (s MediaSource) Stop() {
 	C.obs_source_media_stop(s.c)
 }
 
+func (s MediaSource) PlayPause() {
+	C.obs_source_media_play_pause(s.c)
+}
+
+func (s MediaSource) Next() {
+	C.obs_source_media_next(s.c)
+}
+
+func (s MediaSource) Previous() {
+	C.obs_source_media_previous(s.c)
+}
+
 func (s MediaSource) MediaTime() int64 {
 	return int64(C.obs_source_media_get_time(s.c))
 }
