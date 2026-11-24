@@ -135,3 +135,11 @@ func (t Transition) ForceStop() {
 func (t Transition) IsActive() bool {
 	return bool(C.obs_transition_is_active(t.c))
 }
+
+func (t Transition) SwapBegin(old Transition) {
+	C.obs_transition_swap_begin(t.c, old.c)
+}
+
+func (t Transition) SwapEnd(old Transition) {
+	C.obs_transition_swap_end(t.c, old.c)
+}
